@@ -1,0 +1,23 @@
+{
+  "name": "range-master",
+  "version": "1.0.0",
+  "description": "Provides animated control over range-dog",
+  "main": [
+    "lib/range-master.js"
+  ],
+  "authors": [
+    "John Hornsby <john.hornsby@sequence.co.uk>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "dev",
+    "lib",
+    "node_modules",
+    "src",
+    ".babelrc",
+    ".gitignore",
+    "package.json",
+    "webpack.config.js"
+  ]
+}
