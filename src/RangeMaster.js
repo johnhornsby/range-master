@@ -30,6 +30,17 @@ export default class RangeMaster extends EventEmitter {
 
 	static EVENT_UPDATE = 'eventUpdate';
 
+	static EVENT_CLICK = 'eventClick';
+
+	static EVENT_DRAG_COMPLETE = 'eventDragComplete';
+
+	static EVENT_DOUBLE_CLICK = 'eventDoubleClick';
+
+	static EVENT_SLIDE_COMPLETE = 'eventSlideComplete';
+
+	static EVENT_POINTER_DOWN = 'eventPointerDown';
+
+
 	static INERTIA_TIMEOUT = 100;
 
 	static OUT_OF_RANGE_DRAG_MODIFIER = 0.25;
@@ -149,6 +160,8 @@ export default class RangeMaster extends EventEmitter {
 		//console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._activatePostDragBehaviour();
+
+		this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y);
 	}
 
 
@@ -163,13 +176,19 @@ export default class RangeMaster extends EventEmitter {
 		//console.log(`pointerDown deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._stopAllAnimation();
+
+		this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y);
 	}
 
 
-	singleClick(x, y) {}
+	singleClick(x, y) {
+		this.emit(RangeMaster.EVENT_CLICK, x, y);
+	}
 
 
-	doubleClick(x, y) {}
+	doubleClick(x, y) {
+		this.emit(RangeMaster.EVENT_DOUBLE_CLICK, x, y);
+	}
 
 
 
@@ -447,6 +466,8 @@ export default class RangeMaster extends EventEmitter {
 		this._cellIndex = Math.round(this._rangedog.x / this._cellLength);
 
 		this._stopAllAnimation();
+
+		this.emit(RangeMaster.EVENT_SLIDE_COMPLETE);
 	}
 
 

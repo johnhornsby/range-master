@@ -120,6 +120,26 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: 'eventUpdate',
 			enumerable: true
 		}, {
+			key: "EVENT_CLICK",
+			value: 'eventClick',
+			enumerable: true
+		}, {
+			key: "EVENT_DRAG_COMPLETE",
+			value: 'eventDragComplete',
+			enumerable: true
+		}, {
+			key: "EVENT_DOUBLE_CLICK",
+			value: 'eventDoubleClick',
+			enumerable: true
+		}, {
+			key: "EVENT_SLIDE_COMPLETE",
+			value: 'eventSlideComplete',
+			enumerable: true
+		}, {
+			key: "EVENT_POINTER_DOWN",
+			value: 'eventPointerDown',
+			enumerable: true
+		}, {
 			key: "INERTIA_TIMEOUT",
 			value: 100,
 			enumerable: true
@@ -209,6 +229,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				//console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 				this._activatePostDragBehaviour();
+
+				this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y);
 			}
 		}, {
 			key: "dragMove",
@@ -223,13 +245,19 @@ return /******/ (function(modules) { // webpackBootstrap
 				//console.log(`pointerDown deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 				this._stopAllAnimation();
+
+				this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y);
 			}
 		}, {
 			key: "singleClick",
-			value: function singleClick(x, y) {}
+			value: function singleClick(x, y) {
+				this.emit(RangeMaster.EVENT_CLICK, x, y);
+			}
 		}, {
 			key: "doubleClick",
-			value: function doubleClick(x, y) {}
+			value: function doubleClick(x, y) {
+				this.emit(RangeMaster.EVENT_DOUBLE_CLICK, x, y);
+			}
 
 			/*_______________________________________________
 	  	RangeDog Event Handlers
@@ -485,6 +513,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._cellIndex = Math.round(this._rangedog.x / this._cellLength);
 
 				this._stopAllAnimation();
+
+				this.emit(RangeMaster.EVENT_SLIDE_COMPLETE);
 			}
 		}, {
 			key: "_stopAllAnimation",
@@ -1619,7 +1649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						var rawAmmount = event.deltaY ? event.deltaY : event.detail;
 						normalized = -(rawAmmount % 3 ? rawAmmount * 10 : rawAmmount / 3);
 					}
-				console.log(normalized);
+				// console.log(normalized);
 
 				return normalized;
 			}

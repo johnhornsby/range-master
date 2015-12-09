@@ -8860,6 +8860,18 @@
 
 				var rangeMaster = new _distRangeMaster2['default'](options);
 				rangeMaster.on(_distRangeMaster2['default'].EVENT_UPDATE, this._onRangeMasterUpdate.bind(this));
+				rangeMaster.on(_distRangeMaster2['default'].EVENT_DRAG_COMPLETE, function (x, y) {
+					console.log('RangeMaster.EVENT_DRAG_COMPLETE ' + x + ' ' + y);
+				});
+				rangeMaster.on(_distRangeMaster2['default'].EVENT_DOUBLE_CLICK, function (x, y) {
+					console.log('RangeMaster.EVENT_DOUBLE_CLICK ' + x + ' ' + y);
+				});
+				rangeMaster.on(_distRangeMaster2['default'].EVENT_SLIDE_COMPLETE, function () {
+					console.log('RangeMaster.EVENT_SLIDE_COMPLETE');;
+				});
+				rangeMaster.on(_distRangeMaster2['default'].EVENT_POINTER_DOWN, function (x, y) {
+					console.log('RangeMaster.EVENT_POINTER_DOWN ' + x + ' ' + y);
+				});
 
 				var nextButton = document.getElementsByClassName('carousel__next')[0];
 				var prevButton = document.getElementsByClassName('carousel__previous')[0];
@@ -9057,6 +9069,26 @@
 						value: 'eventUpdate',
 						enumerable: true
 					}, {
+						key: "EVENT_CLICK",
+						value: 'eventClick',
+						enumerable: true
+					}, {
+						key: "EVENT_DRAG_COMPLETE",
+						value: 'eventDragComplete',
+						enumerable: true
+					}, {
+						key: "EVENT_DOUBLE_CLICK",
+						value: 'eventDoubleClick',
+						enumerable: true
+					}, {
+						key: "EVENT_SLIDE_COMPLETE",
+						value: 'eventSlideComplete',
+						enumerable: true
+					}, {
+						key: "EVENT_POINTER_DOWN",
+						value: 'eventPointerDown',
+						enumerable: true
+					}, {
 						key: "INERTIA_TIMEOUT",
 						value: 100,
 						enumerable: true
@@ -9146,6 +9178,8 @@
 							//console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 							this._activatePostDragBehaviour();
+
+							this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y);
 						}
 					}, {
 						key: "dragMove",
@@ -9160,13 +9194,19 @@
 							//console.log(`pointerDown deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 							this._stopAllAnimation();
+
+							this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y);
 						}
 					}, {
 						key: "singleClick",
-						value: function singleClick(x, y) {}
+						value: function singleClick(x, y) {
+							this.emit(RangeMaster.EVENT_CLICK, x, y);
+						}
 					}, {
 						key: "doubleClick",
-						value: function doubleClick(x, y) {}
+						value: function doubleClick(x, y) {
+							this.emit(RangeMaster.EVENT_DOUBLE_CLICK, x, y);
+						}
 
 						/*_______________________________________________
 	     	RangeDog Event Handlers
@@ -9422,6 +9462,8 @@
 							this._cellIndex = Math.round(this._rangedog.x / this._cellLength);
 
 							this._stopAllAnimation();
+
+							this.emit(RangeMaster.EVENT_SLIDE_COMPLETE);
 						}
 					}, {
 						key: "_stopAllAnimation",
@@ -10608,7 +10650,7 @@
 									var rawAmmount = event.deltaY ? event.deltaY : event.detail;
 									normalized = -(rawAmmount % 3 ? rawAmmount * 10 : rawAmmount / 3);
 								}
-							console.log(normalized);
+							// console.log(normalized);
 
 							return normalized;
 						}

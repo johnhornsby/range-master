@@ -32,6 +32,20 @@ export default class Carousel {
 
 		const rangeMaster = new RangeMaster(options);
 		rangeMaster.on(RangeMaster.EVENT_UPDATE, ::this._onRangeMasterUpdate);
+		rangeMaster.on(RangeMaster.EVENT_DRAG_COMPLETE, (x, y) => {
+			console.log(`RangeMaster.EVENT_DRAG_COMPLETE ${x} ${y}`);
+		});
+		rangeMaster.on(RangeMaster.EVENT_DOUBLE_CLICK, (x, y) => {
+			console.log(`RangeMaster.EVENT_DOUBLE_CLICK ${x} ${y}`);
+		});
+		rangeMaster.on(RangeMaster.EVENT_SLIDE_COMPLETE, () => {
+			console.log(`RangeMaster.EVENT_SLIDE_COMPLETE`);;
+		});
+		rangeMaster.on(RangeMaster.EVENT_POINTER_DOWN, (x, y) => {
+			console.log(`RangeMaster.EVENT_POINTER_DOWN ${x} ${y}`);
+		});
+
+
 
 		const nextButton = document.getElementsByClassName('carousel__next')[0];
 		const prevButton = document.getElementsByClassName('carousel__previous')[0];

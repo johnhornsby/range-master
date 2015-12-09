@@ -303,7 +303,7 @@ export default class InputController {
 	        const rawAmmount = event.deltaY ? event.deltaY : event.detail;
 	        normalized = -(rawAmmount % 3 ? rawAmmount * 10 : rawAmmount / 3);
 	    }
-	    console.log(normalized);
+	    // console.log(normalized);
 
 	    return normalized;
 	}
