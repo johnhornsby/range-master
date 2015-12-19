@@ -34,6 +34,8 @@ export default class RangeMaster extends EventEmitter {
 
 	static EVENT_DRAG_COMPLETE = 'eventDragComplete';
 
+	static EVENT_DRAG_MOVE = 'eventDragMove';
+
 	static EVENT_DOUBLE_CLICK = 'eventDoubleClick';
 
 	static EVENT_SLIDE_COMPLETE = 'eventSlideComplete';
@@ -169,6 +171,8 @@ export default class RangeMaster extends EventEmitter {
 		//console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._onDragMove(deltaX, "pointer");
+
+		this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY);
 	}
 
 

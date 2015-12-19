@@ -179,7 +179,7 @@ export default class InputController {
 			this._lastY = y;
 		}
 
-		if (Math.abs(this._deltaX) < Math.abs(this._deltaY) && event.targetTouches) {
+		if (Math.abs(this._deltaX) < Math.abs(this._deltaY) && event.targetTouches)  {
 			
 			
 		} else {
@@ -229,15 +229,15 @@ export default class InputController {
 		const downTimeDuration = new Date().getTime() - this._downStartTime;									//check duration of mousedown and mouseup
 		let timeElapsedSinceLastClick;
 		
-		if (this._click === true && distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION) {
+		if(this._click === true && distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION) {
 
 			this._clickStartArray.push(this._downStartTime);																//add time of start click to array
 			timeElapsedSinceLastClick = this._downStartTime - this._clickStartArray[this._clickStartArray.length - 2];		//duration between this click and last, from mousedown of first click to mousedown of second click
 			
-			if (timeElapsedSinceLastClick < InputController.DOUBLE_CLICK_THRESHOLD_DURATION) {								//if double click duration is below doubleClickThreshold then create double click
+			if(timeElapsedSinceLastClick < InputController.DOUBLE_CLICK_THRESHOLD_DURATION){								//if double click duration is below doubleClickThreshold then create double click
 	
 				this._onDoubleClick(x, y);
-			} else {
+			}else{
 				this._singleClickTimeout = setTimeout( () => {
 					this._onSingleClick(x, y);
 				}, InputController.DOUBLE_CLICK_THRESHOLD_DURATION); //use timeout on single click to allow for user to double click and overide single click action
@@ -303,7 +303,7 @@ export default class InputController {
 	        const rawAmmount = event.deltaY ? event.deltaY : event.detail;
 	        normalized = -(rawAmmount % 3 ? rawAmmount * 10 : rawAmmount / 3);
 	    }
-	    // console.log(normalized);
+	    console.log(normalized);
 
 	    return normalized;
 	}

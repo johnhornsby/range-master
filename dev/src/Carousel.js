@@ -44,6 +44,9 @@ export default class Carousel {
 		rangeMaster.on(RangeMaster.EVENT_POINTER_DOWN, (x, y) => {
 			console.log(`RangeMaster.EVENT_POINTER_DOWN ${x} ${y}`);
 		});
+		rangeMaster.on(RangeMaster.EVENT_DRAG_MOVE, (x, y) => {
+			console.log(`RangeMaster.EVENT_DRAG_MOVE ${x} ${y}`);
+		});
 
 
 

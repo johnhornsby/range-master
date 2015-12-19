@@ -8872,6 +8872,9 @@
 				rangeMaster.on(_distRangeMaster2['default'].EVENT_POINTER_DOWN, function (x, y) {
 					console.log('RangeMaster.EVENT_POINTER_DOWN ' + x + ' ' + y);
 				});
+				rangeMaster.on(_distRangeMaster2['default'].EVENT_DRAG_MOVE, function (x, y) {
+					console.log('RangeMaster.EVENT_DRAG_MOVE ' + x + ' ' + y);
+				});
 
 				var nextButton = document.getElementsByClassName('carousel__next')[0];
 				var prevButton = document.getElementsByClassName('carousel__previous')[0];
@@ -9077,6 +9080,10 @@
 						value: 'eventDragComplete',
 						enumerable: true
 					}, {
+						key: "EVENT_DRAG_MOVE",
+						value: 'eventDragMove',
+						enumerable: true
+					}, {
 						key: "EVENT_DOUBLE_CLICK",
 						value: 'eventDoubleClick',
 						enumerable: true
@@ -9187,6 +9194,8 @@
 							//console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 							this._onDragMove(deltaX, "pointer");
+
+							this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY);
 						}
 					}, {
 						key: "pointerDown",

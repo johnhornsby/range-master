@@ -128,6 +128,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: 'eventDragComplete',
 			enumerable: true
 		}, {
+			key: "EVENT_DRAG_MOVE",
+			value: 'eventDragMove',
+			enumerable: true
+		}, {
 			key: "EVENT_DOUBLE_CLICK",
 			value: 'eventDoubleClick',
 			enumerable: true
@@ -238,6 +242,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				//console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 				this._onDragMove(deltaX, "pointer");
+
+				this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY);
 			}
 		}, {
 			key: "pointerDown",
