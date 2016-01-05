@@ -321,3 +321,6 @@ html, body {
 
 .panoramic-360 {
   display: none; }
+  .panoramic-360__image {
+    height: 30vh;
+    width: auto; }

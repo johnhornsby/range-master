@@ -24,7 +24,9 @@
     "webpack-dev-server": "^1.11.0"
   },
   "dependencies": {
+    "json-loader": "^0.5.4",
     "motion-tween": "git+https://github.com/johnhornsby/motion-tween.git",
+    "pixi.js": "^3.0.9",
     "range-dog": "git+https://github.com/johnhornsby/rangedog.git"
   }
 }

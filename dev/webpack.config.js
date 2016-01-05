@@ -9,6 +9,7 @@ module.exports = {
 		path: __dirname + "/js",
 		filename: "app.js"
 	},
+	node: { fs: "empty" },
 	resolve: {
 		alias: {
 			"range-dog": './RangeDog',
@@ -18,16 +19,20 @@ module.exports = {
 		// fallback: ['/Users/johnhornsby/work/research and development/rangemaster/node_modules/']
 	},
 	module: {
-	  loaders: [
-	    {
-	      test: /\.js?$/,
-	      exclude: /(css|node_modules|scss)/,
-	      loader: 'babel-loader'
-	    },
-	    {
-	      test: /node_modules\/unidragger/,
-	      loader: 'imports?define=>undefined'
-	    }
-	  ]
+		loaders: [
+			{
+				test: /\.js?$/,
+				exclude: /(css|node_modules|scss)/,
+				loader: 'babel-loader'
+			},
+			{
+				test: /node_modules\/unidragger/,
+				loader: 'imports?define=>undefined'
+			},
+			{
+				test: /\.json$/,
+				loader: 'json-loader'
+			}
+		]
 	}
 }
