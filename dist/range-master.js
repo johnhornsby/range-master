@@ -56,21 +56,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _wolfy87Eventemitter = __webpack_require__(1);
 
@@ -88,6 +80,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _motionTween2 = _interopRequireDefault(_motionTween);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var _DEFAULT_OPTIONS = {
 		length: 1,
 		frameLength: 1,
@@ -103,78 +103,33 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 	};
 
-	var RangeMaster = (function (_EventEmitter) {
+	var RangeMaster = function (_EventEmitter) {
 		_inherits(RangeMaster, _EventEmitter);
-
-		_createClass(RangeMaster, null, [{
-			key: "tweenType",
-			value: {
-				"INERTIA": 0,
-				"SLIDE_TO": 1,
-				"SNAP_TO": 2,
-				"INERTIA_BOUNCE": 3
-			},
-			enumerable: true
-		}, {
-			key: "EVENT_UPDATE",
-			value: 'eventUpdate',
-			enumerable: true
-		}, {
-			key: "EVENT_CLICK",
-			value: 'eventClick',
-			enumerable: true
-		}, {
-			key: "EVENT_DRAG_COMPLETE",
-			value: 'eventDragComplete',
-			enumerable: true
-		}, {
-			key: "EVENT_DRAG_MOVE",
-			value: 'eventDragMove',
-			enumerable: true
-		}, {
-			key: "EVENT_DOUBLE_CLICK",
-			value: 'eventDoubleClick',
-			enumerable: true
-		}, {
-			key: "EVENT_SLIDE_COMPLETE",
-			value: 'eventSlideComplete',
-			enumerable: true
-		}, {
-			key: "EVENT_POINTER_DOWN",
-			value: 'eventPointerDown',
-			enumerable: true
-		}, {
-			key: "INERTIA_TIMEOUT",
-			value: 100,
-			enumerable: true
-		}, {
-			key: "OUT_OF_RANGE_DRAG_MODIFIER",
-			value: 0.25,
-			enumerable: true
-		}]);
 
 		function RangeMaster(options) {
 			_classCallCheck(this, RangeMaster);
 
-			_get(Object.getPrototypeOf(RangeMaster.prototype), "constructor", this).call(this);
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RangeMaster).call(this));
 
-			this._options = {};
-			this._rangedog = null;
-			this._inputController = null;
-			this._deltas = [];
-			this._cellIndex = 0;
-			this._friction = 0.075;
-			this._motionTween = null;
-			this._tweenType = null;
-			this._length = 1;
-			this._cellLength = 1;
-			this._wrap = false;
-			this._inertia = true;
-			this._rounded = false;
-			this._snap = false;
-			this._target = null;
-			this._mouseDeltaToRangeUnitRatio = null;
-			this._init(options);
+			_this._options = {};
+			_this._rangedog = null;
+			_this._inputController = null;
+			_this._deltas = [];
+			_this._cellIndex = 0;
+			_this._friction = 0.075;
+			_this._motionTween = null;
+			_this._tweenType = null;
+			_this._length = 1;
+			_this._cellLength = 1;
+			_this._wrap = false;
+			_this._inertia = true;
+			_this._rounded = false;
+			_this._snap = false;
+			_this._target = null;
+			_this._mouseDeltaToRangeUnitRatio = null;
+
+			_this._init(options);
+			return _this;
 		}
 
 		/*_______________________________________________
@@ -313,14 +268,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this._bindMethods();
 
-				this._inputController = new _InputController2["default"](this._target);
+				this._inputController = new _InputController2.default(this._target);
 				this._inputController.setDelegate(this);
 				this._inputController.activate();
 
 				var rangeDogOptions = _extends({}, this._options);
 
-				this._rangedog = new _rangeDog2["default"](rangeDogOptions);
-				this._rangedog.on(_rangeDog2["default"].EVENT_UPDATE, this._onRangeUpdate);
+				this._rangedog = new _rangeDog2.default(rangeDogOptions);
+				this._rangedog.on(_rangeDog2.default.EVENT_UPDATE, this._onRangeUpdate);
 			}
 		}, {
 			key: "_bindMethods",
@@ -496,7 +451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				var tweenConfig = {
 					startValue: this._rangedog.x,
 					endValue: x,
-					animatorType: _motionTween2["default"].animatorType.friction,
+					animatorType: _motionTween2.default.animatorType.friction,
 					animatorOptions: null, // use defaults of selected type
 					update: this._motionTweenUpdate,
 					complete: this._motionTweenComplete
@@ -504,7 +459,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				switch (type) {
 					case RangeMaster.tweenType.INERTIA_BOUNCE:
-						tweenConfig.animatorType = _motionTween2["default"].animatorType.spring;
+						tweenConfig.animatorType = _motionTween2.default.animatorType.spring;
 						tweenConfig.animatorOptions = {
 							stiffness: 125,
 							damping: 15
@@ -512,7 +467,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						break;
 				}
 
-				this._motionTween = new _motionTween2["default"](tweenConfig);
+				this._motionTween = new _motionTween2.default(tweenConfig);
 
 				this._motionTween.start();
 
@@ -555,7 +510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_destroy",
 			value: function _destroy() {
-				this._rangedog.off(_rangeDog2["default"].EVENT_UPDATE, this._onRangeUpdate);
+				this._rangedog.off(_rangeDog2.default.EVENT_UPDATE, this._onRangeUpdate);
 				this._rangedog = null;
 				this._onRangeUpdate = null;
 
@@ -565,10 +520,24 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return RangeMaster;
-	})(_wolfy87Eventemitter2["default"]);
+	}(_wolfy87Eventemitter2.default);
 
-	exports["default"] = RangeMaster;
-	module.exports = exports["default"];
+	RangeMaster.tweenType = {
+		"INERTIA": 0,
+		"SLIDE_TO": 1,
+		"SNAP_TO": 2,
+		"INERTIA_BOUNCE": 3
+	};
+	RangeMaster.EVENT_UPDATE = 'eventUpdate';
+	RangeMaster.EVENT_CLICK = 'eventClick';
+	RangeMaster.EVENT_DRAG_COMPLETE = 'eventDragComplete';
+	RangeMaster.EVENT_DRAG_MOVE = 'eventDragMove';
+	RangeMaster.EVENT_DOUBLE_CLICK = 'eventDoubleClick';
+	RangeMaster.EVENT_SLIDE_COMPLETE = 'eventSlideComplete';
+	RangeMaster.EVENT_POINTER_DOWN = 'eventPointerDown';
+	RangeMaster.INERTIA_TIMEOUT = 100;
+	RangeMaster.OUT_OF_RANGE_DRAG_MODIFIER = 0.25;
+	exports.default = RangeMaster;
 
 /***/ },
 /* 1 */
@@ -1374,44 +1343,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _Point = __webpack_require__(4);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _Point2 = _interopRequireDefault(_Point);
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _geomPoint = __webpack_require__(4);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var _geomPoint2 = _interopRequireDefault(_geomPoint);
+	var InputController = function () {
+		// pixels
 
-	var InputController = (function () {
-		_createClass(InputController, null, [{
-			key: 'MOUSE_DRAG_MODIFIER',
-			value: 2,
-			enumerable: true
-		}, {
-			key: 'CLICK_THRESHOLD_DURATION',
-			value: 250,
-			// milliseconds 500
-
-			enumerable: true
-		}, {
-			key: 'DOUBLE_CLICK_THRESHOLD_DURATION',
-			value: 250,
-			// milliseconds 500
-
-			enumerable: true
-		}, {
-			key: 'CLICK_THRESHOLD_DISTANCE',
-			value: 10,
-			// pixels
-
-			enumerable: true
-		}]);
+		// milliseconds 500
 
 		function InputController(interactiveElement) {
 			_classCallCheck(this, InputController);
@@ -1433,7 +1382,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._interactiveElement = interactiveElement;
 
 			this._init();
-		}
+		} // milliseconds 500
 
 		_createClass(InputController, [{
 			key: '_init',
@@ -1599,7 +1548,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function _confirmClickOrTap(x, y) {
 				var _this = this;
 
-				var distanceMoved = _geomPoint2['default'].distance(new _geomPoint2['default'](x, y), new _geomPoint2['default'](this._originX, this._originY)); //check distance moved since mouse down
+				var distanceMoved = _Point2.default.distance(new _Point2.default(x, y), new _Point2.default(this._originX, this._originY)); //check distance moved since mouse down
 
 				var downTimeDuration = new Date().getTime() - this._downStartTime; //check duration of mousedown and mouseup
 				var timeElapsedSinceLastClick = undefined;
@@ -1689,6 +1638,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			//PUBLIC
 			//________________________________________________________________________________________________________________________
+
 		}, {
 			key: 'isPointerDown',
 			value: function isPointerDown() {
@@ -1717,10 +1667,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return InputController;
-	})();
+	}();
 
-	exports['default'] = InputController;
-	module.exports = exports['default'];
+	InputController.MOUSE_DRAG_MODIFIER = 2;
+	InputController.CLICK_THRESHOLD_DURATION = 250;
+	InputController.DOUBLE_CLICK_THRESHOLD_DURATION = 250;
+	InputController.CLICK_THRESHOLD_DISTANCE = 10;
+	exports.default = InputController;
 
 /***/ },
 /* 4 */
@@ -1728,15 +1681,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Point = (function () {
+	var Point = function () {
 		function Point(x, y) {
 			_classCallCheck(this, Point);
 
@@ -1749,19 +1702,16 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function toString() {
 				return "Point x:" + this.x + " y:" + this.y;
 			}
-		}], [{
-			key: "distance",
-			value: function value(p1, p2) {
-				return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-			},
-			enumerable: true
 		}]);
 
 		return Point;
-	})();
+	}();
 
-	exports["default"] = Point;
-	module.exports = exports["default"];
+	Point.distance = function (p1, p2) {
+		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+	};
+
+	exports.default = Point;
 
 /***/ },
 /* 5 */
