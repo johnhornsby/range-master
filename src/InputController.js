@@ -88,6 +88,8 @@ export default class InputController {
 
 
 	_activate(){
+		this._deactivate();
+		
 		if (this._isMac) {
 			this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
 		} else {

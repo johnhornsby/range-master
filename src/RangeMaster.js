@@ -133,6 +133,10 @@ export default class RangeMaster extends EventEmitter {
 	}
 
 
+	activate() { this._activate(); }
+
+
+	deactivate() { this._deactivate(); }
 
 
 
@@ -482,6 +486,16 @@ export default class RangeMaster extends EventEmitter {
 		}
 
 		this._tweenType = null;
+	}
+
+
+	_activate() {
+		this._inputController.activate();
+	}
+
+
+	_deactivate() {
+		this._inputController.deactivate();
 	}
 
 
