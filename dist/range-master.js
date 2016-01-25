@@ -211,6 +211,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this._slideToCellIndex(index, 0);
 			}
+		}, {
+			key: "activate",
+			value: function activate() {
+				this._activate();
+			}
+		}, {
+			key: "deactivate",
+			value: function deactivate() {
+				this._deactivate();
+			}
 
 			/*_______________________________________________
 	  	Input Controller Event Handlers
@@ -531,6 +541,16 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 
 				this._tweenType = null;
+			}
+		}, {
+			key: "_activate",
+			value: function _activate() {
+				this._inputController.activate();
+			}
+		}, {
+			key: "_deactivate",
+			value: function _deactivate() {
+				this._inputController.deactivate();
 			}
 		}, {
 			key: "_destroy",
@@ -1452,6 +1472,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_activate',
 			value: function _activate() {
+				this._deactivate();
+
 				if (this._isMac) {
 					this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
 				} else {
