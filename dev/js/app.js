@@ -7689,6 +7689,8 @@
 					snap: true,
 					target: null,
 					contain: false,
+					animatorType: _motionTween2["default"].animatorType.friction,
+					animatorOptions: null,
 					mouseDeltaToRangeUnitRatio: function mouseDeltaToRangeUnitRatio() {
 						return 1;
 					}
@@ -7801,6 +7803,16 @@
 							this._updateCellIndex();
 
 							this._slideToCellIndex(index, 0);
+						}
+					}, {
+						key: "activate",
+						value: function activate() {
+							this._activate();
+						}
+					}, {
+						key: "deactivate",
+						value: function deactivate() {
+							this._deactivate();
 						}
 
 						/*_______________________________________________
@@ -8077,12 +8089,13 @@
 							var tweenConfig = {
 								startValue: this._rangedog.x,
 								endValue: x,
-								animatorType: _motionTween2["default"].animatorType.friction,
-								animatorOptions: null, // use defaults of selected type
+								animatorType: this._options.animatorType,
+								animatorOptions: this._options.animatorOptions, // use defaults of selected type
 								update: this._motionTweenUpdate,
 								complete: this._motionTweenComplete
 							};
 
+							// @todo look at a better way to allow user to customise all animation types and options
 							switch (type) {
 								case RangeMaster.tweenType.INERTIA_BOUNCE:
 									tweenConfig.animatorType = _motionTween2["default"].animatorType.spring;
@@ -8122,6 +8135,16 @@
 							}
 
 							this._tweenType = null;
+						}
+					}, {
+						key: "_activate",
+						value: function _activate() {
+							this._inputController.activate();
+						}
+					}, {
+						key: "_deactivate",
+						value: function _deactivate() {
+							this._inputController.deactivate();
 						}
 					}, {
 						key: "_destroy",
@@ -9095,6 +9118,8 @@
 					}, {
 						key: '_activate',
 						value: function _activate() {
+							this._deactivate();
+
 							if (this._isMac) {
 								this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
 							} else {

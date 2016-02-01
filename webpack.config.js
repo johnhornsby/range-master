@@ -10,11 +10,7 @@ module.exports = {
 	    {
 	      test: /\.js?$/,
 	      exclude: /(dist|lib|node_modules)/,
-	      loader: 'babel-loader',
-	      query: {
-	        presets: ['stage-0', "es2015"],
-	        "plugins": ["transform-class-properties"]
-	      }
+	      loader: 'babel-loader'
 	    }
 	  ]
 	}

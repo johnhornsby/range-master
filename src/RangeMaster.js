@@ -14,6 +14,8 @@ const _DEFAULT_OPTIONS = {
 	snap: true,
 	target: null,
 	contain: false,
+	animatorType: MotionTween.animatorType.friction,
+	animatorOptions: null,
 	mouseDeltaToRangeUnitRatio: () => 1
 }
 
@@ -441,12 +443,13 @@ export default class RangeMaster extends EventEmitter {
 		const tweenConfig = {
 			startValue: this._rangedog.x,
 			endValue: x,
-			animatorType: MotionTween.animatorType.friction,
-			animatorOptions: null, // use defaults of selected type
+			animatorType: this._options.animatorType,
+			animatorOptions: this._options.animatorOptions, // use defaults of selected type
 			update: this._motionTweenUpdate,
 			complete: this._motionTweenComplete
 		};
 
+		// @todo look at a better way to allow user to customise all animation types and options
 		switch(type) {
 			case RangeMaster.tweenType.INERTIA_BOUNCE:
 				tweenConfig.animatorType = MotionTween.animatorType.spring;
