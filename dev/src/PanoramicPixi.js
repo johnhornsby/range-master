@@ -63,12 +63,12 @@ export default class PanoramicPixi {
 
 		const imagePaths = [
 			"./img/pixi/c130.jpg",
-			"./img/pixi/ch47.jpg",
-			"./img/pixi/cn235.jpg",
-			"./img/pixi/f15.jpg",
-			"./img/pixi/f16.jpg",
-			"./img/pixi/uh1.jpg",
-			"./img/pixi/uh60.jpg"
+			// "./img/pixi/ch47.jpg",
+			// "./img/pixi/cn235.jpg",
+			// "./img/pixi/f15.jpg",
+			// "./img/pixi/f16.jpg",
+			// "./img/pixi/uh1.jpg",
+			// "./img/pixi/uh60.jpg"
 		];
 
 		imagePaths.forEach((filePath, index) => {
