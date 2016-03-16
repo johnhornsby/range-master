@@ -1996,22 +1996,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._isAnimating = false;
 	      }
 	    }
-	  }], [{
-	    key: "getValue",
-	    value: function getValue(animatorType, animatorOptions, time) {
-	      return MotionTween._getValue(animatorType, animatorOptions, time);
-	    }
-	  }, {
-	    key: "_getValue",
-	    value: function _getValue(animatorType, animatorOptions, time) {
-	      switch (animatorType) {
-	        case _animatorsCubicBezier2["default"].Type:
-	          return _animatorsCubicBezier2["default"].getValue(animatorOptions, time);
-	          break;
-	        default:
-	          return _animatorsEase2["default"].getValue(animatorOptions, time);
-	      }
-	    }
 	  }]);
 
 	  return MotionTween;
@@ -2355,18 +2339,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function step(delta) {
 	      // t: current time, b: begInnIng value, c: change In value, d: duration
 	      this._time += delta;
-	      this._x = CubicBezier._getPointOnBezierCurve(this._options.controlPoints, this._time);
+	      this._x = this._getPointOnBezierCurve(this._options.controlPoints, this._time);
 	      return this._x;
-	    }
-	  }, {
-	    key: "isFinished",
-	    value: function isFinished() {
-	      return this._time >= 1;
-	    }
-	  }], [{
-	    key: "getValue",
-	    value: function getValue(options, time) {
-	      return CubicBezier._getPointOnBezierCurve(options.controlPoints, time);
 	    }
 	  }, {
 	    key: "_getPointOnBezierCurve",
@@ -2377,14 +2351,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var c1 = { x: controlPoints[0], y: controlPoints[1] };
 	      var c2 = { x: controlPoints[2], y: controlPoints[3] };
 
-	      var b1 = CubicBezier._interpolate(a1, c1, l);
-	      var b2 = CubicBezier._interpolate(c1, c2, l);
-	      var b3 = CubicBezier._interpolate(c2, a2, l);
+	      var b1 = this._interpolate(a1, c1, l);
+	      var b2 = this._interpolate(c1, c2, l);
+	      var b3 = this._interpolate(c2, a2, l);
 
-	      c1 = CubicBezier._interpolate(b1, b2, l);
-	      c2 = CubicBezier._interpolate(b2, b3, l);
+	      c1 = this._interpolate(b1, b2, l);
+	      c2 = this._interpolate(b2, b3, l);
 
-	      return CubicBezier._interpolate(c1, c2, l).y;
+	      return this._interpolate(c1, c2, l).y;
 	    }
 	  }, {
 	    key: "_interpolate",
@@ -2395,6 +2369,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      p3.y = p1.y + (p2.y - p1.y) * l;
 
 	      return p3;
+	    }
+	  }, {
+	    key: "isFinished",
+	    value: function isFinished() {
+	      return this._time >= 1;
 	    }
 	  }]);
 
@@ -2462,11 +2441,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "isFinished",
 	    value: function isFinished() {
 	      return this._time >= 1;
-	    }
-	  }], [{
-	    key: "getValue",
-	    value: function getValue(options, time) {
-	      return options.easingFunction(time, 0, 1, 1);
 	    }
 	  }]);
 

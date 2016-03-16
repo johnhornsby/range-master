@@ -2,7 +2,7 @@
   "name": "range-master",
   "version": "1.0.0",
   "description": "Provides animated control over range-dog",
-  "main": "lib/rangemaster.js",
+  "main": "dist/range-master.js",
   "scripts": {
     "build:lib": "babel src --out-dir lib",
     "build:umd": "webpack",
