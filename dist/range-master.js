@@ -102,6 +102,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		animatorOptions: null,
 		mouseDeltaToRangeUnitRatio: function mouseDeltaToRangeUnitRatio() {
 			return 1;
+		},
+		inputOptions: {
+			inputTypes: [_InputController2["default"].INPUT_TYPE.MOUSE, _InputController2["default"].INPUT_TYPE.TOUCH, _InputController2["default"].INPUT_TYPE.WHEEL]
 		}
 	};
 
@@ -315,7 +318,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this._bindMethods();
 
-				this._inputController = new _InputController2["default"](this._target);
+				this._inputController = new _InputController2["default"](this._target, this._options.inputOptions);
 				this._inputController.setDelegate(this);
 				this._inputController.activate();
 
@@ -1375,50 +1378,65 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var _geomPoint = __webpack_require__(4);
 
 	var _geomPoint2 = _interopRequireDefault(_geomPoint);
 
+	var _DEFAULT_OPTIONS = {
+		inputTypes: ["touch", "mouse", "wheel"]
+	};
+
 	var InputController = (function () {
 		_createClass(InputController, null, [{
-			key: 'MOUSE_DRAG_MODIFIER',
+			key: "MOUSE_DRAG_MODIFIER",
 			value: 2,
 			enumerable: true
 		}, {
-			key: 'CLICK_THRESHOLD_DURATION',
+			key: "CLICK_THRESHOLD_DURATION",
 			value: 250,
 			// milliseconds 500
 
 			enumerable: true
 		}, {
-			key: 'DOUBLE_CLICK_THRESHOLD_DURATION',
+			key: "DOUBLE_CLICK_THRESHOLD_DURATION",
 			value: 250,
 			// milliseconds 500
 
 			enumerable: true
 		}, {
-			key: 'CLICK_THRESHOLD_DISTANCE',
+			key: "CLICK_THRESHOLD_DISTANCE",
 			value: 10,
 			// pixels
 
 			enumerable: true
+		}, {
+			key: "INPUT_TYPE",
+			value: {
+				"TOUCH": "touch",
+				"MOUSE": "mouse",
+				"WHEEL": "wheel"
+			},
+			enumerable: true
 		}]);
 
-		function InputController(interactiveElement) {
+		function InputController(interactiveElement, options) {
 			_classCallCheck(this, InputController);
 
+			this._options = {};
 			this._delegate = null;
 			this._interactiveElement = null;
 			this._originX = 0;
@@ -1435,12 +1453,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			this._interactiveElement = interactiveElement;
 
-			this._init();
+			this._init(options);
 		}
 
 		_createClass(InputController, [{
-			key: '_init',
-			value: function _init() {
+			key: "_init",
+			value: function _init(options) {
+
+				this._options = _extends({}, _DEFAULT_OPTIONS, options);
+
 				this._clickStartArray = [new Date().getTime()]; //start this with a time so we don't have to check later for things.
 
 				this._isMac = navigator.platform.match(/Mac/i) ? true : false;
@@ -1448,12 +1469,12 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._bindMethods();
 			}
 		}, {
-			key: '_destroy',
+			key: "_destroy",
 			value: function _destroy() {
 				this._unbindMethods();
 			}
 		}, {
-			key: '_bindMethods',
+			key: "_bindMethods",
 			value: function _bindMethods() {
 				this._onPointerDown = this._onPointerDown.bind(this);
 				this._onPointerMove = this._onPointerMove.bind(this);
@@ -1463,7 +1484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				// this._onDOMMouseScrollHandler = ::this._onDOMMouseScrollHandler;
 			}
 		}, {
-			key: '_unbindMethods',
+			key: "_unbindMethods",
 			value: function _unbindMethods() {
 				this._onPointerDown = null;
 				this._onPointerMove = null;
@@ -1473,32 +1494,39 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._onDOMMouseScrollHandler = null;
 			}
 		}, {
-			key: '_activate',
+			key: "_activate",
 			value: function _activate() {
 				this._deactivate();
 
-				if (this._isMac) {
-					this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
-				} else {
-					this._interactiveElement.addEventListener('DOMMouseScroll', this._onMouseWheelHandler);
-					this._interactiveElement.addEventListener('mousewheel', this._onMouseWheelHandler);
+				var inputTypes = this._options.inputTypes.join("");
+
+				if (inputTypes.indexOf(InputController.INPUT_TYPE.WHEEL) > -1) {
+					if (this._isMac) {
+						this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
+					} else {
+						this._interactiveElement.addEventListener('DOMMouseScroll', this._onMouseWheelHandler);
+						this._interactiveElement.addEventListener('mousewheel', this._onMouseWheelHandler);
+					}
 				}
 
-				this._interactiveElement.addEventListener('mousedown', this._onPointerDown);
-				this._interactiveElement.addEventListener('touchstart', this._onPointerDown);
+				if (inputTypes.indexOf(InputController.INPUT_TYPE.MOUSE) > -1) {
+					this._interactiveElement.addEventListener('mousedown', this._onPointerDown);
+				}
+
+				if (inputTypes.indexOf(InputController.INPUT_TYPE.TOUCH) > -1) {
+					this._interactiveElement.addEventListener('touchstart', this._onPointerDown);
+				}
 			}
 		}, {
-			key: '_deactivate',
+			key: "_deactivate",
 			value: function _deactivate() {
-
 				this._interactiveElement.removeEventListener('wheel', this._onMouseWheelHandler);
-				this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 				this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 				this._interactiveElement.removeEventListener('mousedown', this._onPointerDown);
 				this._interactiveElement.removeEventListener('touchstart', this._onPointerDown);
 			}
 		}, {
-			key: '_addPostActionEvents',
+			key: "_addPostActionEvents",
 			value: function _addPostActionEvents() {
 				window.addEventListener('mousemove', this._onPointerMove);
 				window.addEventListener('mouseup', this._onPointerUp);
@@ -1506,7 +1534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				window.addEventListener('touchend', this._onPointerUp);
 			}
 		}, {
-			key: '_removePostActionEvents',
+			key: "_removePostActionEvents",
 			value: function _removePostActionEvents() {
 				window.removeEventListener('mousemove', this._onPointerMove);
 				window.removeEventListener('mouseup', this._onPointerUp);
@@ -1514,7 +1542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				window.removeEventListener('touchend', this._onPointerUp);
 			}
 		}, {
-			key: '_onPointerDown',
+			key: "_onPointerDown",
 			value: function _onPointerDown(event) {
 				if (event.targetTouches && event.targetTouches.length !== 1) return false;
 
@@ -1541,7 +1569,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return false;
 			}
 		}, {
-			key: '_onPointerMove',
+			key: "_onPointerMove",
 			value: function _onPointerMove(event) {
 				if (event.targetTouches && event.targetTouches.length !== 1) return false;
 
@@ -1568,7 +1596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return false;
 			}
 		}, {
-			key: '_onPointerUp',
+			key: "_onPointerUp",
 			value: function _onPointerUp(event) {
 				if (event.targetTouches && event.targetTouches.length > 0) return false;
 
@@ -1595,14 +1623,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				return false;
 			}
 		}, {
-			key: '_onPointerCancel',
+			key: "_onPointerCancel",
 			value: function _onPointerCancel(event) {}
 		}, {
-			key: '_confirmClickOrTap',
+			key: "_confirmClickOrTap",
 			value: function _confirmClickOrTap(x, y) {
 				var _this = this;
 
-				var distanceMoved = _geomPoint2['default'].distance(new _geomPoint2['default'](x, y), new _geomPoint2['default'](this._originX, this._originY)); //check distance moved since mouse down
+				var distanceMoved = _geomPoint2["default"].distance(new _geomPoint2["default"](x, y), new _geomPoint2["default"](this._originX, this._originY)); //check distance moved since mouse down
 
 				var downTimeDuration = new Date().getTime() - this._downStartTime; //check duration of mousedown and mouseup
 				var timeElapsedSinceLastClick = undefined;
@@ -1628,12 +1656,12 @@ return /******/ (function(modules) { // webpackBootstrap
 				return false;
 			}
 		}, {
-			key: '_onSingleClick',
+			key: "_onSingleClick",
 			value: function _onSingleClick(x, y) {
 				this._delegate.singleClick(this._lastX, this._lastY);
 			}
 		}, {
-			key: '_onDoubleClick',
+			key: "_onDoubleClick",
 			value: function _onDoubleClick(x, y) {
 				this._delegate.doubleClick(this._lastX, this._lastY);
 			}
@@ -1649,7 +1677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			// }
 
 		}, {
-			key: '_onMouseWheelHandler',
+			key: "_onMouseWheelHandler",
 			value: function _onMouseWheelHandler(event) {
 
 				var delta = -event.deltaY;
@@ -1671,7 +1699,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				event.preventDefault(); //prevent lion browser from bounce scroll effect
 			}
 		}, {
-			key: '_normalizeWheelSpeed',
+			key: "_normalizeWheelSpeed",
 			value: function _normalizeWheelSpeed(event) {
 				var normalized = undefined;
 				if (event.wheelDelta) {
@@ -1685,7 +1713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return normalized;
 			}
 		}, {
-			key: '_setMouseWheenDelta',
+			key: "_setMouseWheenDelta",
 			value: function _setMouseWheenDelta(delta) {
 				this._delegate.setMouseWheelScrollDelta(delta);
 			}
@@ -1693,27 +1721,27 @@ return /******/ (function(modules) { // webpackBootstrap
 			//PUBLIC
 			//________________________________________________________________________________________________________________________
 		}, {
-			key: 'isPointerDown',
+			key: "isPointerDown",
 			value: function isPointerDown() {
 				return this._pointerDown;
 			}
 		}, {
-			key: 'setDelegate',
+			key: "setDelegate",
 			value: function setDelegate(delegate) {
 				this._delegate = delegate;
 			}
 		}, {
-			key: 'activate',
+			key: "activate",
 			value: function activate() {
 				this._activate();
 			}
 		}, {
-			key: 'deactivate',
+			key: "deactivate",
 			value: function deactivate() {
 				this._deactivate();
 			}
 		}, {
-			key: 'destroy',
+			key: "destroy",
 			value: function destroy() {
 				this._destroy();
 			}
@@ -1722,8 +1750,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		return InputController;
 	})();
 
-	exports['default'] = InputController;
-	module.exports = exports['default'];
+	exports["default"] = InputController;
+	module.exports = exports["default"];
 
 /***/ },
 /* 4 */
@@ -1966,6 +1994,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._options.update(this._x);
 	        this._options.complete();
 	        this._isAnimating = false;
+	      }
+	    }
+	  }], [{
+	    key: "getValue",
+	    value: function getValue(animatorType, animatorOptions, time) {
+	      return MotionTween._getValue(animatorType, animatorOptions, time);
+	    }
+	  }, {
+	    key: "_getValue",
+	    value: function _getValue(animatorType, animatorOptions, time) {
+	      switch (animatorType) {
+	        case _animatorsCubicBezier2["default"].Type:
+	          return _animatorsCubicBezier2["default"].getValue(animatorOptions, time);
+	          break;
+	        default:
+	          return _animatorsEase2["default"].getValue(animatorOptions, time);
 	      }
 	    }
 	  }]);
@@ -2311,8 +2355,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function step(delta) {
 	      // t: current time, b: begInnIng value, c: change In value, d: duration
 	      this._time += delta;
-	      this._x = this._getPointOnBezierCurve(this._options.controlPoints, this._time);
+	      this._x = CubicBezier._getPointOnBezierCurve(this._options.controlPoints, this._time);
 	      return this._x;
+	    }
+	  }, {
+	    key: "isFinished",
+	    value: function isFinished() {
+	      return this._time >= 1;
+	    }
+	  }], [{
+	    key: "getValue",
+	    value: function getValue(options, time) {
+	      return CubicBezier._getPointOnBezierCurve(options.controlPoints, time);
 	    }
 	  }, {
 	    key: "_getPointOnBezierCurve",
@@ -2323,14 +2377,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var c1 = { x: controlPoints[0], y: controlPoints[1] };
 	      var c2 = { x: controlPoints[2], y: controlPoints[3] };
 
-	      var b1 = this._interpolate(a1, c1, l);
-	      var b2 = this._interpolate(c1, c2, l);
-	      var b3 = this._interpolate(c2, a2, l);
+	      var b1 = CubicBezier._interpolate(a1, c1, l);
+	      var b2 = CubicBezier._interpolate(c1, c2, l);
+	      var b3 = CubicBezier._interpolate(c2, a2, l);
 
-	      c1 = this._interpolate(b1, b2, l);
-	      c2 = this._interpolate(b2, b3, l);
+	      c1 = CubicBezier._interpolate(b1, b2, l);
+	      c2 = CubicBezier._interpolate(b2, b3, l);
 
-	      return this._interpolate(c1, c2, l).y;
+	      return CubicBezier._interpolate(c1, c2, l).y;
 	    }
 	  }, {
 	    key: "_interpolate",
@@ -2341,11 +2395,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      p3.y = p1.y + (p2.y - p1.y) * l;
 
 	      return p3;
-	    }
-	  }, {
-	    key: "isFinished",
-	    value: function isFinished() {
-	      return this._time >= 1;
 	    }
 	  }]);
 
@@ -2413,6 +2462,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "isFinished",
 	    value: function isFinished() {
 	      return this._time >= 1;
+	    }
+	  }], [{
+	    key: "getValue",
+	    value: function getValue(options, time) {
+	      return options.easingFunction(time, 0, 1, 1);
 	    }
 	  }]);
 

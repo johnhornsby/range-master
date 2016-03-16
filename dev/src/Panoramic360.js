@@ -26,7 +26,10 @@ export default class Panoramic360 {
 			rounded: true,
 			snap: false,
 			target: this._360Target,
-			mouseDeltaToRangeUnitRatio: ::this._360ratio
+			mouseDeltaToRangeUnitRatio: ::this._360ratio,
+			inputOptions: {
+				inputTypes: ["touch", "mouse"]
+			}
 			
 		}
 

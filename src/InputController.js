@@ -1,5 +1,8 @@
 import Point from './geom/Point';
 
+const _DEFAULT_OPTIONS = {
+	inputTypes: ["touch", "mouse", "wheel"]
+}
 
 export default class InputController {
 
@@ -11,6 +14,14 @@ export default class InputController {
 
 	static CLICK_THRESHOLD_DISTANCE = 10; // pixels
 
+	static INPUT_TYPE = {
+		"TOUCH": "touch",
+		"MOUSE": "mouse",
+		"WHEEL": "wheel"
+	};
+
+
+	_options = {};
 
 	_delegate = null;
 	
@@ -41,11 +52,11 @@ export default class InputController {
 	_isMac = false;
 
 
-	constructor (interactiveElement){
+	constructor (interactiveElement, options){
 
 		this._interactiveElement = interactiveElement;
 
-		this._init();
+		this._init(options);
 	}
 
 
@@ -53,7 +64,13 @@ export default class InputController {
 
 
 	
-	_init() {
+	_init(options) {
+
+		this._options = {
+			..._DEFAULT_OPTIONS,
+			...options
+		}
+
 		this._clickStartArray = [new Date().getTime()];//start this with a time so we don't have to check later for things.
 
 		this._isMac = navigator.platform.match(/Mac/i)?true:false;
@@ -90,22 +107,30 @@ export default class InputController {
 	_activate(){
 		this._deactivate();
 		
-		if (this._isMac) {
-			this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
-		} else {
-			this._interactiveElement.addEventListener('DOMMouseScroll', this._onMouseWheelHandler);
-			this._interactiveElement.addEventListener('mousewheel', this._onMouseWheelHandler);
+		const inputTypes = this._options.inputTypes.join("");
+
+		if (inputTypes.indexOf(InputController.INPUT_TYPE.WHEEL) > -1) {
+			if (this._isMac) {
+				this._interactiveElement.addEventListener('wheel', this._onMouseWheelHandler);
+			} else {
+				this._interactiveElement.addEventListener('DOMMouseScroll', this._onMouseWheelHandler);
+				this._interactiveElement.addEventListener('mousewheel', this._onMouseWheelHandler);
+			}
 		}
 
-		this._interactiveElement.addEventListener('mousedown',  this._onPointerDown);
-		this._interactiveElement.addEventListener('touchstart',  this._onPointerDown);
+		if (inputTypes.indexOf(InputController.INPUT_TYPE.MOUSE) > -1) {
+			this._interactiveElement.addEventListener('mousedown',  this._onPointerDown);
+		}
+
+
+		if (inputTypes.indexOf(InputController.INPUT_TYPE.TOUCH) > -1) {
+			this._interactiveElement.addEventListener('touchstart',  this._onPointerDown);
+		}
 	}
 
 
 	_deactivate(){
-
 		this._interactiveElement.removeEventListener('wheel', this._onMouseWheelHandler);
-		this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 		this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 		this._interactiveElement.removeEventListener('mousedown',  this._onPointerDown);
 		this._interactiveElement.removeEventListener('touchstart',  this._onPointerDown);

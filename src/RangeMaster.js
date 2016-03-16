@@ -16,7 +16,14 @@ const _DEFAULT_OPTIONS = {
 	contain: false,
 	animatorType: MotionTween.animatorType.friction,
 	animatorOptions: null,
-	mouseDeltaToRangeUnitRatio: () => 1
+	mouseDeltaToRangeUnitRatio: () => 1,
+	inputOptions: {
+		inputTypes: [
+			InputController.INPUT_TYPE.MOUSE,
+			InputController.INPUT_TYPE.TOUCH,
+			InputController.INPUT_TYPE.WHEEL
+		]
+	}
 }
 
 
@@ -260,7 +267,7 @@ export default class RangeMaster extends EventEmitter {
 		this._bindMethods();
 
 
-		this._inputController = new InputController(this._target);
+		this._inputController = new InputController(this._target, this._options.inputOptions);
 		this._inputController.setDelegate(this);
 		this._inputController.activate();
 
