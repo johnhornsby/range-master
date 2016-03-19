@@ -181,7 +181,7 @@ export default class InputController {
 
 		this._pointerDown = true;
 
-		this._delegate.pointerDown(0, 0, this._lastX, this._lastY);
+		this._delegate.pointerDown(0, 0, this._lastX, this._lastY, event);
 		
 		// event.preventDefault();
 
@@ -200,7 +200,7 @@ export default class InputController {
 			this._deltaY = y - this._lastY;
 
 			if (this._delegate.dragMove !== undefined){
-				this._delegate.dragMove(this._deltaX, this._deltaY, x, y);
+				this._delegate.dragMove(this._deltaX, this._deltaY, x, y, event);
 			}
 
 			this._lastX = x;
@@ -238,7 +238,7 @@ export default class InputController {
 			return false;
 		}
 		
-		this._delegate.dragEnd(this._deltaX, this._deltaY, x, y);
+		this._delegate.dragEnd(this._deltaX, this._deltaY, x, y, event);
 
 		event.preventDefault();
 
@@ -315,7 +315,7 @@ export default class InputController {
 		// delta = this._normalizeWheel(event).pixelY;
 		delta = this._normalizeWheelSpeed(event);
 
-		this._setMouseWheenDelta(delta);
+		this._setMouseWheenDelta(delta, event);
 
 		event.preventDefault();	//prevent lion browser from bounce scroll effect
 	}
@@ -339,8 +339,8 @@ export default class InputController {
 
 
 
-	_setMouseWheenDelta(delta) {
-		this._delegate.setMouseWheelScrollDelta(delta);
+	_setMouseWheenDelta(delta, event) {
+		this._delegate.setMouseWheelScrollDelta(delta, event);
 	}
 
 

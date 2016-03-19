@@ -160,7 +160,7 @@ export default class RangeMaster extends EventEmitter {
 	Input Controller Event Handlers
 	_______________________________________________*/
 
-	setMouseWheelScrollDelta(delta) {
+	setMouseWheelScrollDelta(delta, event) {
 		//console.log(`setMouseWheelScrollDelta delta:${delta}`);
 
 		// currently stopping mouse interaction when snap is on, as we have no way of determining a scroll stop event
@@ -171,30 +171,30 @@ export default class RangeMaster extends EventEmitter {
 	}
 
 
-	dragEnd(deltaX, deltaY, x, y) {
+	dragEnd(deltaX, deltaY, x, y, event) {
 		//console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._activatePostDragBehaviour();
 
-		this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y);
+		this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y, event);
 	}
 
 
-	dragMove(deltaX, deltaY, x, y) {
+	dragMove(deltaX, deltaY, x, y, event) {
 		//console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._onDragMove(deltaX, "pointer");
 
-		this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY);
+		this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY, event);
 	}
 
 
-	pointerDown(deltaX, deltaY, x, y) {
+	pointerDown(deltaX, deltaY, x, y, event) {
 		//console.log(`pointerDown deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._stopAllAnimation();
 
-		this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y);
+		this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y, event);
 	}
 
 

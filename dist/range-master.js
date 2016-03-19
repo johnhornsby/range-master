@@ -233,7 +233,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: "setMouseWheelScrollDelta",
-			value: function setMouseWheelScrollDelta(delta) {
+			value: function setMouseWheelScrollDelta(delta, event) {
 				//console.log(`setMouseWheelScrollDelta delta:${delta}`);
 
 				// currently stopping mouse interaction when snap is on, as we have no way of determining a scroll stop event
@@ -244,30 +244,30 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}, {
 			key: "dragEnd",
-			value: function dragEnd(deltaX, deltaY, x, y) {
+			value: function dragEnd(deltaX, deltaY, x, y, event) {
 				//console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 				this._activatePostDragBehaviour();
 
-				this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y);
+				this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y, event);
 			}
 		}, {
 			key: "dragMove",
-			value: function dragMove(deltaX, deltaY, x, y) {
+			value: function dragMove(deltaX, deltaY, x, y, event) {
 				//console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 				this._onDragMove(deltaX, "pointer");
 
-				this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY);
+				this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY, event);
 			}
 		}, {
 			key: "pointerDown",
-			value: function pointerDown(deltaX, deltaY, x, y) {
+			value: function pointerDown(deltaX, deltaY, x, y, event) {
 				//console.log(`pointerDown deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 				this._stopAllAnimation();
 
-				this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y);
+				this.emit(RangeMaster.EVENT_POINTER_DOWN, x, y, event);
 			}
 		}, {
 			key: "singleClick",
@@ -1563,7 +1563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this._pointerDown = true;
 
-				this._delegate.pointerDown(0, 0, this._lastX, this._lastY);
+				this._delegate.pointerDown(0, 0, this._lastX, this._lastY, event);
 
 				// event.preventDefault();
 
@@ -1582,7 +1582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					this._deltaY = y - this._lastY;
 
 					if (this._delegate.dragMove !== undefined) {
-						this._delegate.dragMove(this._deltaX, this._deltaY, x, y);
+						this._delegate.dragMove(this._deltaX, this._deltaY, x, y, event);
 					}
 
 					this._lastX = x;
@@ -1617,7 +1617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return false;
 				}
 
-				this._delegate.dragEnd(this._deltaX, this._deltaY, x, y);
+				this._delegate.dragEnd(this._deltaX, this._deltaY, x, y, event);
 
 				event.preventDefault();
 
@@ -1695,7 +1695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				// delta = this._normalizeWheel(event).pixelY;
 				delta = this._normalizeWheelSpeed(event);
 
-				this._setMouseWheenDelta(delta);
+				this._setMouseWheenDelta(delta, event);
 
 				event.preventDefault(); //prevent lion browser from bounce scroll effect
 			}
@@ -1715,8 +1715,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}, {
 			key: "_setMouseWheenDelta",
-			value: function _setMouseWheenDelta(delta) {
-				this._delegate.setMouseWheelScrollDelta(delta);
+			value: function _setMouseWheenDelta(delta, event) {
+				this._delegate.setMouseWheelScrollDelta(delta, event);
 			}
 
 			//PUBLIC
