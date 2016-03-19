@@ -1528,10 +1528,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_addPostActionEvents",
 			value: function _addPostActionEvents() {
-				window.addEventListener('mousemove', this._onPointerMove);
-				window.addEventListener('mouseup', this._onPointerUp);
-				window.addEventListener('touchmove', this._onPointerMove);
-				window.addEventListener('touchend', this._onPointerUp);
+				// use capture phase to ensure we have the oppitunity to stop propagation from these events
+				window.addEventListener('mousemove', this._onPointerMove, true);
+				window.addEventListener('mouseup', this._onPointerUp, true);
+				window.addEventListener('touchmove', this._onPointerMove, true);
+				window.addEventListener('touchend', this._onPointerUp, true);
 			}
 		}, {
 			key: "_removePostActionEvents",
