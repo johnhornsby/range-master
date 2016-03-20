@@ -147,10 +147,10 @@ export default class InputController {
 
 
 	_removePostActionEvents() {
-		window.removeEventListener('mousemove', this._onPointerMove);
-		window.removeEventListener('mouseup', this._onPointerUp);
-		window.removeEventListener('touchmove', this._onPointerMove);
-		window.removeEventListener('touchend', this._onPointerUp);
+		window.removeEventListener('mousemove', this._onPointerMove, true);
+		window.removeEventListener('mouseup', this._onPointerUp, true);
+		window.removeEventListener('touchmove', this._onPointerMove, true);
+		window.removeEventListener('touchend', this._onPointerUp, true);
 	}
 
 
