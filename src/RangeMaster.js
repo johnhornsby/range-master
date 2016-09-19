@@ -122,7 +122,7 @@ export default class RangeMaster extends EventEmitter {
 			this._updateCellIndex();
 		}
 
-		this._slideToCellIndex(this._getNextCellIndex(1), 1)
+		return this._slideToCellIndex(this._getNextCellIndex(1), 1);
 	}
 
 
@@ -131,21 +131,24 @@ export default class RangeMaster extends EventEmitter {
 			this._updateCellIndex();
 		}
 
-		this._slideToCellIndex(this._getNextCellIndex(-1), -1)
+		return this._slideToCellIndex(this._getNextCellIndex(-1), -1);
 	}
 
 
 	slideToCellIndex(index) {
 		this._updateCellIndex();
 
-		this._slideToCellIndex(index, 0)
+		return this._slideToCellIndex(index, 0);
 	}
 
 
-	activate() { this._activate(); }
+	activate() { this._activate() }
 
 
-	deactivate() { this._deactivate(); }
+	deactivate() { this._deactivate() }
+
+
+	get cellIndex() { return this._cellIndex }
 
 
 
@@ -430,6 +433,8 @@ export default class RangeMaster extends EventEmitter {
 		//console.log(`_slideToCellIndex: index=${index} this._cellIndex=${this._cellIndex} polarity=${polarity} destination=${destination}`);
 
 		this._tweenTo(destination, RangeMaster.tweenType.SLIDE_TO);
+
+		return this._cellIndex;
 	}
 
 

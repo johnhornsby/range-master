@@ -198,7 +198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					this._updateCellIndex();
 				}
 
-				this._slideToCellIndex(this._getNextCellIndex(1), 1);
+				return this._slideToCellIndex(this._getNextCellIndex(1), 1);
 			}
 		}, {
 			key: "slideToPreviousCell",
@@ -207,14 +207,14 @@ return /******/ (function(modules) { // webpackBootstrap
 					this._updateCellIndex();
 				}
 
-				this._slideToCellIndex(this._getNextCellIndex(-1), -1);
+				return this._slideToCellIndex(this._getNextCellIndex(-1), -1);
 			}
 		}, {
 			key: "slideToCellIndex",
 			value: function slideToCellIndex(index) {
 				this._updateCellIndex();
 
-				this._slideToCellIndex(index, 0);
+				return this._slideToCellIndex(index, 0);
 			}
 		}, {
 			key: "activate",
@@ -226,13 +226,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function deactivate() {
 				this._deactivate();
 			}
+		}, {
+			key: "setMouseWheelScrollDelta",
 
 			/*_______________________________________________
 	  	Input Controller Event Handlers
 	  _______________________________________________*/
 
-		}, {
-			key: "setMouseWheelScrollDelta",
 			value: function setMouseWheelScrollDelta(delta, event) {
 				//console.log(`setMouseWheelScrollDelta delta:${delta}`);
 
@@ -481,6 +481,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				//console.log(`_slideToCellIndex: index=${index} this._cellIndex=${this._cellIndex} polarity=${polarity} destination=${destination}`);
 
 				this._tweenTo(destination, RangeMaster.tweenType.SLIDE_TO);
+
+				return this._cellIndex;
 			}
 		}, {
 			key: "_tweenTo",
@@ -567,6 +569,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this._stopAllAnimation();
 				this.removeAllListeners();
+			}
+		}, {
+			key: "cellIndex",
+			get: function get() {
+				return this._cellIndex;
 			}
 		}]);
 
