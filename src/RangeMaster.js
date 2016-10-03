@@ -151,6 +151,7 @@ export default class RangeMaster extends EventEmitter {
 	get cellIndex() { return this._cellIndex }
 
 
+	get x() { return this._rangedog.x }
 
 
 
@@ -169,24 +170,28 @@ export default class RangeMaster extends EventEmitter {
 		// currently stopping mouse interaction when snap is on, as we have no way of determining a scroll stop event
 		if (this._snap === false) {
 			this._stopAllAnimation();
-			this._onDragMove(delta, "mouseWheel");
+			this._onDragMove(delta, 0, 0, 0, "mouseWheel");
 		}
 	}
 
 
 	dragEnd(deltaX, deltaY, x, y, event) {
-		//console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
+		// console.log(`dragEnd deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
 		this._activatePostDragBehaviour();
 
+		// reset deltas array, as we will want to know the start
+		this._deltas = [];
+
 		this.emit(RangeMaster.EVENT_DRAG_COMPLETE, x, y, event);
+
 	}
 
 
 	dragMove(deltaX, deltaY, x, y, event) {
-		//console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
+		// console.log(`dragMove deltaX:${deltaX} deltaY:${deltaY} x:${x} y:${y}`);
 
-		this._onDragMove(deltaX, "pointer");
+		this._onDragMove(deltaX, deltaY, x, y, "pointer");
 
 		this.emit(RangeMaster.EVENT_DRAG_MOVE, deltaX, deltaY, event);
 	}
@@ -290,7 +295,7 @@ export default class RangeMaster extends EventEmitter {
 	}
 
 
-	_onDragMove(deltaX, input) {
+	_onDragMove(deltaX, deltaY, x, y, input) {
 		// drag to the right +
 		// drag to the left -
 		deltaX *= -1; 
@@ -316,13 +321,13 @@ export default class RangeMaster extends EventEmitter {
 		}
 
 		// Store delta to evaluate velocity and inertia
-		const deltaData = {x:deltaX, time: new Date().getTime(), input: input};
+		// const deltaData = {deltaX:deltaX, deltaY:deltaY, x:x, y:y, time: new Date().getTime(), input: input};
 		this._deltas.push(deltaData);
 
 		// sets to the nearest cell index
 		this._cellIndex = Math.round((this._rangedog.x + deltaX) / this._cellLength);
 
-		// we use increment here as getting rangedog x we get the rounded value, we need to append this delta to the real float
+		// we use increment here, because when getting rangedog x we get the rounded value, we need to append this delta to the real float
 		this._rangedog.increment(deltaX);
 	}
 
@@ -358,7 +363,7 @@ export default class RangeMaster extends EventEmitter {
 			return;
 		}
 		
-		velocity = deltaInfo.x;
+		velocity = deltaInfo.deltaX;
 
 		// was the last delta recording within limits
 		if (new Date().getTime() - deltaInfo.time > RangeMaster.INERTIA_TIMEOUT) {
@@ -366,9 +371,16 @@ export default class RangeMaster extends EventEmitter {
 			velocity = 0;
 		}
 
+		// if the downward distance is greater than the horizonal movement, ensure we have no inertia to cause snap 
+		if (Math.abs(deltaInfo.y - this._deltas[0].y) > Math.abs(deltaInfo.x - this._deltas[0].x)) {
+			hasInertia = false;
+			velocity = 0;
+			//console.log(' minimise intention ' + deltaInfo.y + ' ' + this._deltas[0].y + ' ' + deltaInfo.x + " "  + this._deltas[0].x);
+		}
+
 		// if RangeMaster is set to snap then force snapping to cell lengths
 		if (this._snap) {
-			 const inertiaDirection = deltaInfo.x;
+			 const inertiaDirection = deltaInfo.deltaX;
 
 			// find the nearest cell destination in the direction of the inertia
 			if (hasInertia === true) {
