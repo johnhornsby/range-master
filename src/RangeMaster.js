@@ -321,7 +321,7 @@ export default class RangeMaster extends EventEmitter {
 		}
 
 		// Store delta to evaluate velocity and inertia
-		// const deltaData = {deltaX:deltaX, deltaY:deltaY, x:x, y:y, time: new Date().getTime(), input: input};
+		const deltaData = {deltaX:deltaX, deltaY:deltaY, x:x, y:y, time: new Date().getTime(), input: input};
 		this._deltas.push(deltaData);
 
 		// sets to the nearest cell index
