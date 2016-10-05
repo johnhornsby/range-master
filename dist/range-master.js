@@ -338,6 +338,13 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._motionTweenComplete = this._motionTweenComplete.bind(this);
 			}
 		}, {
+			key: "_unbindMethods",
+			value: function _unbindMethods() {
+				this._onRangeUpdate = null;
+				this._motionTweenUpdate = null;
+				this._motionTweenComplete = null;
+			}
+		}, {
 			key: "_onDragMove",
 			value: function _onDragMove(deltaX, deltaY, x, y, input) {
 				// drag to the right +
@@ -584,6 +591,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._rangedog.off(_rangeDog2["default"].EVENT_UPDATE, this._onRangeUpdate);
 				this._rangedog = null;
 				this._onRangeUpdate = null;
+
+				this._inputController.destroy();
+				this._inputController = null;
 
 				this._stopAllAnimation();
 				this.removeAllListeners();
@@ -1501,7 +1511,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_destroy",
 			value: function _destroy() {
+				clearTimeout(this._singleClickTimeout);
+				this._deactivate();
+				this._removePostActionEvents();
 				this._unbindMethods();
+				this._delegate = null;
 			}
 		}, {
 			key: "_bindMethods",

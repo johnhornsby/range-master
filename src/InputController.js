@@ -80,7 +80,11 @@ export default class InputController {
 
 
 	_destroy() {
+		clearTimeout(this._singleClickTimeout)
+		this._deactivate();
+		this._removePostActionEvents();
 		this._unbindMethods();
+		this._delegate = null;
 	}
 
 

@@ -295,6 +295,13 @@ export default class RangeMaster extends EventEmitter {
 	}
 
 
+	_unbindMethods() {
+		this._onRangeUpdate = null;
+		this._motionTweenUpdate = null;
+		this._motionTweenComplete = null;
+	}
+
+
 	_onDragMove(deltaX, deltaY, x, y, input) {
 		// drag to the right +
 		// drag to the left -
@@ -534,6 +541,9 @@ export default class RangeMaster extends EventEmitter {
 		this._rangedog.off(Rangedog.EVENT_UPDATE, this._onRangeUpdate);
 		this._rangedog = null;
 		this._onRangeUpdate = null;
+
+		this._inputController.destroy();
+		this._inputController = null;
 
 		this._stopAllAnimation();
 		this.removeAllListeners();
