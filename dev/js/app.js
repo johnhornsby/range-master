@@ -7783,6 +7783,9 @@
 				rangeMaster.on(_distRangeMaster2['default'].EVENT_DRAG_COMPLETE, function (x, y) {
 					console.log('RangeMaster.EVENT_DRAG_COMPLETE ' + x + ' ' + y);
 				});
+				rangeMaster.on(_distRangeMaster2['default'].EVENT_CLICK, function (x, y) {
+					console.log('RangeMaster.EVENT_CLICK ' + x + ' ' + y);
+				});
 				rangeMaster.on(_distRangeMaster2['default'].EVENT_DOUBLE_CLICK, function (x, y) {
 					console.log('RangeMaster.EVENT_DOUBLE_CLICK ' + x + ' ' + y);
 				});
@@ -7794,6 +7797,9 @@
 				});
 				rangeMaster.on(_distRangeMaster2['default'].EVENT_DRAG_MOVE, function (x, y) {
 					console.log('RangeMaster.EVENT_DRAG_MOVE ' + x + ' ' + y);
+				});
+				this._frame.addEventListener('click', function (event) {
+					console.log('Standard Click Event');
 				});
 
 				var nextButton = document.getElementsByClassName('carousel__next')[0];
@@ -8237,7 +8243,7 @@
 							}
 
 							// Store delta to evaluate velocity and inertia
-							// const deltaData = {deltaX:deltaX, deltaY:deltaY, x:x, y:y, time: new Date().getTime(), input: input};
+							var deltaData = { deltaX: deltaX, deltaY: deltaY, x: x, y: y, time: new Date().getTime(), input: input };
 							this._deltas.push(deltaData);
 
 							// sets to the nearest cell index
@@ -8296,14 +8302,20 @@
 
 							// if RangeMaster is set to snap then force snapping to cell lengths
 							if (this._snap) {
-								var inertiaDirection = deltaInfo.deltaX;
+
+								var deltasX = this._deltas.map(function (deltaInfo) {
+									return deltaInfo.deltaX;
+								});
+								var inertiaDirection = deltasX.reduce(function (prev, next) {
+									return prev + next;
+								});
 
 								// find the nearest cell destination in the direction of the inertia
 								if (hasInertia === true) {
 									destination = this._rangedog.getNearestCellX(this._rangedog.x, inertiaDirection, false);
 								} else {
 									// if there is no interia then simply snap to nearest
-									destination = this._rangedog.getNearestCellX(this._rangedog.x, 0, this._wrap);
+									destination = this._rangedog.getNearestCellX(this._rangedog.x, 0, false);
 								}
 
 								tweenType = RangeMaster.tweenType.SNAP_TO;
@@ -9435,6 +9447,7 @@
 							this._onPointerUp = this._onPointerUp.bind(this);
 							this._onPointerCancel = this._onPointerCancel.bind(this);
 							this._onMouseWheelHandler = this._onMouseWheelHandler.bind(this);
+							this._onClick = this._onClick.bind(this);
 							// this._onDOMMouseScrollHandler = ::this._onDOMMouseScrollHandler;
 						}
 					}, {
@@ -9446,6 +9459,7 @@
 							this._onPointerCancel = null;
 							this._onMouseWheelHandler = null;
 							this._onDOMMouseScrollHandler = null;
+							this._onClick = null;
 						}
 					}, {
 						key: "_activate",
@@ -9470,6 +9484,8 @@
 							if (inputTypes.indexOf(InputController.INPUT_TYPE.TOUCH) > -1) {
 								this._interactiveElement.addEventListener('touchstart', this._onPointerDown);
 							}
+
+							this._interactiveElement.addEventListener('click', this._onClick, true);
 						}
 					}, {
 						key: "_deactivate",
@@ -9478,6 +9494,7 @@
 							this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 							this._interactiveElement.removeEventListener('mousedown', this._onPointerDown);
 							this._interactiveElement.removeEventListener('touchstart', this._onPointerDown);
+							this._interactiveElement.removeEventListener('click', this._onClick, true);
 						}
 					}, {
 						key: "_addPostActionEvents",
@@ -9578,6 +9595,20 @@
 							return false;
 						}
 					}, {
+						key: "_onClick",
+						value: function _onClick(event) {
+							if (event.targetTouches && event.targetTouches.length > 0) return false;
+
+							var x = event.targetTouches ? this._lastX : event.pageX;
+							var y = event.targetTouches ? this._lastY : event.pageY;
+
+							var isClick = this._determineClick(x, y);
+
+							if (isClick === false) {
+								event.stopPropagation();
+							}
+						}
+					}, {
 						key: "_onPointerCancel",
 						value: function _onPointerCancel(event) {}
 					}, {
@@ -9585,12 +9616,11 @@
 						value: function _confirmClickOrTap(x, y) {
 							var _this = this;
 
-							var distanceMoved = _geomPoint2["default"].distance(new _geomPoint2["default"](x, y), new _geomPoint2["default"](this._originX, this._originY)); //check distance moved since mouse down
+							var isClick = this._determineClick(x, y);
 
-							var downTimeDuration = new Date().getTime() - this._downStartTime; //check duration of mousedown and mouseup
 							var timeElapsedSinceLastClick = undefined;
 
-							if (this._click === true && distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION) {
+							if (this._click === true && isClick) {
 
 								this._clickStartArray.push(this._downStartTime); //add time of start click to array
 								timeElapsedSinceLastClick = this._downStartTime - this._clickStartArray[this._clickStartArray.length - 2]; //duration between this click and last, from mousedown of first click to mousedown of second click
@@ -9609,6 +9639,15 @@
 							}
 
 							return false;
+						}
+					}, {
+						key: "_determineClick",
+						value: function _determineClick(x, y) {
+							var distanceMoved = _geomPoint2["default"].distance(new _geomPoint2["default"](x, y), new _geomPoint2["default"](this._originX, this._originY)); //check distance moved since mouse down
+
+							var downTimeDuration = new Date().getTime() - this._downStartTime; //check duration of mousedown and mouseup
+
+							return distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION;
 						}
 					}, {
 						key: "_onSingleClick",

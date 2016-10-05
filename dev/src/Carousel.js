@@ -35,6 +35,9 @@ export default class Carousel {
 		rangeMaster.on(RangeMaster.EVENT_DRAG_COMPLETE, (x, y) => {
 			console.log(`RangeMaster.EVENT_DRAG_COMPLETE ${x} ${y}`);
 		});
+		rangeMaster.on(RangeMaster.EVENT_CLICK, (x, y) => {
+			console.log(`RangeMaster.EVENT_CLICK ${x} ${y}`);
+		});
 		rangeMaster.on(RangeMaster.EVENT_DOUBLE_CLICK, (x, y) => {
 			console.log(`RangeMaster.EVENT_DOUBLE_CLICK ${x} ${y}`);
 		});
@@ -46,6 +49,9 @@ export default class Carousel {
 		});
 		rangeMaster.on(RangeMaster.EVENT_DRAG_MOVE, (x, y) => {
 			console.log(`RangeMaster.EVENT_DRAG_MOVE ${x} ${y}`);
+		});
+		this._frame.addEventListener('click', (event) => {
+			console.log('Standard Click Event');
 		});
 
 

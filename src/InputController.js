@@ -90,6 +90,7 @@ export default class InputController {
 		this._onPointerUp = ::this._onPointerUp;
 		this._onPointerCancel = ::this._onPointerCancel;
 		this._onMouseWheelHandler = ::this._onMouseWheelHandler;
+		this._onClick = ::this._onClick;
 		// this._onDOMMouseScrollHandler = ::this._onDOMMouseScrollHandler;
 	}
 
@@ -101,6 +102,7 @@ export default class InputController {
 		this._onPointerCancel = null;
 		this._onMouseWheelHandler = null;
 		this._onDOMMouseScrollHandler = null;
+		this._onClick = null;
 	}
 
 
@@ -126,6 +128,8 @@ export default class InputController {
 		if (inputTypes.indexOf(InputController.INPUT_TYPE.TOUCH) > -1) {
 			this._interactiveElement.addEventListener('touchstart',  this._onPointerDown);
 		}
+
+		this._interactiveElement.addEventListener('click', this._onClick, true);
 	}
 
 
@@ -134,6 +138,7 @@ export default class InputController {
 		this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 		this._interactiveElement.removeEventListener('mousedown',  this._onPointerDown);
 		this._interactiveElement.removeEventListener('touchstart',  this._onPointerDown);
+		this._interactiveElement.removeEventListener('click', this._onClick, true);
 	}
 
 
@@ -246,18 +251,31 @@ export default class InputController {
 	}
 
 
+	_onClick(event) {
+		if (event.targetTouches && event.targetTouches.length > 0) return false; 
+
+		const x = (event.targetTouches) ? this._lastX: event.pageX;
+		const y = (event.targetTouches) ? this._lastY: event.pageY;
+
+		const isClick = this._determineClick(x, y);
+
+		if (isClick === false) {
+			event.stopPropagation();
+		}
+	}
+
+
 	_onPointerCancel(event) {
 
 	}
 
 
 	_confirmClickOrTap(x, y) {
-		const distanceMoved = Point.distance(new Point(x, y), new Point(this._originX, this._originY));			//check distance moved since mouse down
-		
-		const downTimeDuration = new Date().getTime() - this._downStartTime;									//check duration of mousedown and mouseup
+		const isClick = this._determineClick(x, y);
+
 		let timeElapsedSinceLastClick;
 		
-		if (this._click === true && distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION) {
+		if (this._click === true && isClick) {
 
 			this._clickStartArray.push(this._downStartTime);																//add time of start click to array
 			timeElapsedSinceLastClick = this._downStartTime - this._clickStartArray[this._clickStartArray.length - 2];		//duration between this click and last, from mousedown of first click to mousedown of second click
@@ -275,6 +293,15 @@ export default class InputController {
 		}
 
 		return false;
+	}
+
+
+	_determineClick(x, y) {
+		const distanceMoved = Point.distance(new Point(x, y), new Point(this._originX, this._originY));			//check distance moved since mouse down
+		
+		const downTimeDuration = new Date().getTime() - this._downStartTime;									//check duration of mousedown and mouseup
+
+		return distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION;
 	}
 
 

@@ -380,14 +380,18 @@ export default class RangeMaster extends EventEmitter {
 
 		// if RangeMaster is set to snap then force snapping to cell lengths
 		if (this._snap) {
-			 const inertiaDirection = deltaInfo.deltaX;
+
+			const deltasX = this._deltas.map(deltaInfo => deltaInfo.deltaX);
+			const inertiaDirection = deltasX.reduce((prev, next) => prev + next);
 
 			// find the nearest cell destination in the direction of the inertia
 			if (hasInertia === true) {
 				destination = this._rangedog.getNearestCellX(this._rangedog.x, inertiaDirection, false);
 			} else {
-				// if there is no interia then simply snap to nearest
-				destination = this._rangedog.getNearestCellX(this._rangedog.x, 0, this._wrap);
+				// if there is no interia then simply snap to nearest,
+				// and in order to really find the nearest we need to set wrap to false, to ensure we actually find
+				// the nearest in any direction
+				destination = this._rangedog.getNearestCellX(this._rangedog.x, 0, false);
 			}
 
 			tweenType = RangeMaster.tweenType.SNAP_TO;

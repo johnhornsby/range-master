@@ -424,14 +424,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				// if RangeMaster is set to snap then force snapping to cell lengths
 				if (this._snap) {
-					var inertiaDirection = deltaInfo.deltaX;
+
+					var deltasX = this._deltas.map(function (deltaInfo) {
+						return deltaInfo.deltaX;
+					});
+					var inertiaDirection = deltasX.reduce(function (prev, next) {
+						return prev + next;
+					});
 
 					// find the nearest cell destination in the direction of the inertia
 					if (hasInertia === true) {
 						destination = this._rangedog.getNearestCellX(this._rangedog.x, inertiaDirection, false);
 					} else {
-						// if there is no interia then simply snap to nearest
-						destination = this._rangedog.getNearestCellX(this._rangedog.x, 0, this._wrap);
+						// if there is no interia then simply snap to nearest,
+						// and in order to really find the nearest we need to set wrap to false, to ensure we actually find
+						// the nearest in any direction
+						destination = this._rangedog.getNearestCellX(this._rangedog.x, 0, false);
 					}
 
 					tweenType = RangeMaster.tweenType.SNAP_TO;
@@ -1503,6 +1511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._onPointerUp = this._onPointerUp.bind(this);
 				this._onPointerCancel = this._onPointerCancel.bind(this);
 				this._onMouseWheelHandler = this._onMouseWheelHandler.bind(this);
+				this._onClick = this._onClick.bind(this);
 				// this._onDOMMouseScrollHandler = ::this._onDOMMouseScrollHandler;
 			}
 		}, {
@@ -1514,6 +1523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._onPointerCancel = null;
 				this._onMouseWheelHandler = null;
 				this._onDOMMouseScrollHandler = null;
+				this._onClick = null;
 			}
 		}, {
 			key: "_activate",
@@ -1538,6 +1548,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (inputTypes.indexOf(InputController.INPUT_TYPE.TOUCH) > -1) {
 					this._interactiveElement.addEventListener('touchstart', this._onPointerDown);
 				}
+
+				this._interactiveElement.addEventListener('click', this._onClick, true);
 			}
 		}, {
 			key: "_deactivate",
@@ -1546,6 +1558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._interactiveElement.removeEventListener('mousewheel', this._onMouseWheelHandler);
 				this._interactiveElement.removeEventListener('mousedown', this._onPointerDown);
 				this._interactiveElement.removeEventListener('touchstart', this._onPointerDown);
+				this._interactiveElement.removeEventListener('click', this._onClick, true);
 			}
 		}, {
 			key: "_addPostActionEvents",
@@ -1646,6 +1659,20 @@ return /******/ (function(modules) { // webpackBootstrap
 				return false;
 			}
 		}, {
+			key: "_onClick",
+			value: function _onClick(event) {
+				if (event.targetTouches && event.targetTouches.length > 0) return false;
+
+				var x = event.targetTouches ? this._lastX : event.pageX;
+				var y = event.targetTouches ? this._lastY : event.pageY;
+
+				var isClick = this._determineClick(x, y);
+
+				if (isClick === false) {
+					event.stopPropagation();
+				}
+			}
+		}, {
 			key: "_onPointerCancel",
 			value: function _onPointerCancel(event) {}
 		}, {
@@ -1653,12 +1680,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function _confirmClickOrTap(x, y) {
 				var _this = this;
 
-				var distanceMoved = _geomPoint2["default"].distance(new _geomPoint2["default"](x, y), new _geomPoint2["default"](this._originX, this._originY)); //check distance moved since mouse down
+				var isClick = this._determineClick(x, y);
 
-				var downTimeDuration = new Date().getTime() - this._downStartTime; //check duration of mousedown and mouseup
 				var timeElapsedSinceLastClick = undefined;
 
-				if (this._click === true && distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION) {
+				if (this._click === true && isClick) {
 
 					this._clickStartArray.push(this._downStartTime); //add time of start click to array
 					timeElapsedSinceLastClick = this._downStartTime - this._clickStartArray[this._clickStartArray.length - 2]; //duration between this click and last, from mousedown of first click to mousedown of second click
@@ -1677,6 +1703,15 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 
 				return false;
+			}
+		}, {
+			key: "_determineClick",
+			value: function _determineClick(x, y) {
+				var distanceMoved = _geomPoint2["default"].distance(new _geomPoint2["default"](x, y), new _geomPoint2["default"](this._originX, this._originY)); //check distance moved since mouse down
+
+				var downTimeDuration = new Date().getTime() - this._downStartTime; //check duration of mousedown and mouseup
+
+				return distanceMoved < InputController.CLICK_THRESHOLD_DISTANCE && downTimeDuration < InputController.CLICK_THRESHOLD_DURATION;
 			}
 		}, {
 			key: "_onSingleClick",
