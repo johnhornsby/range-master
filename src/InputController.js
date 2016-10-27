@@ -265,6 +265,7 @@ export default class InputController {
 
 		if (isClick === false) {
 			event.stopPropagation();
+			event.preventDefault();
 		}
 	}
 
