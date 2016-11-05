@@ -15,7 +15,7 @@ const _DEFAULT_OPTIONS = {
 	target: null,
 	contain: false,
 	animatorType: MotionTween.animatorType.friction,
-	animatorOptions: null,
+	animatorOptions: {},
 	mouseDeltaToRangeUnitRatio: () => 1,
 	inputOptions: {
 		inputTypes: [
