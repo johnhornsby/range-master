@@ -52,7 +52,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -616,9 +616,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports["default"] = RangeMaster;
 	module.exports = exports["default"];
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	 * EventEmitter v4.2.11 - git.io/ee
@@ -1096,9 +1096,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}.call(this));
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -1414,9 +1414,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports["default"] = RangeDog;
 	module.exports = exports["default"];
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -1826,9 +1826,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports["default"] = InputController;
 	module.exports = exports["default"];
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	"use strict";
 
@@ -1867,9 +1867,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports["default"] = Point;
 	module.exports = exports["default"];
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
@@ -1925,14 +1925,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/************************************************************************/
 	/******/ ([
 	/* 0 */
-	/***/ function(module, exports, __webpack_require__) {
+	/***/ (function(module, exports, __webpack_require__) {
 
 		module.exports = __webpack_require__(1);
 
 
-	/***/ },
+	/***/ }),
 	/* 1 */
-	/***/ function(module, exports, __webpack_require__) {
+	/***/ (function(module, exports, __webpack_require__) {
 
 		"use strict";
 
@@ -2069,6 +2069,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }, {
 		    key: "_tick",
 		    value: function _tick() {
+		      // check for destroyed motion tween
+		      if (this._options === null) return;
+
 		      var now = new Date().getTime();
 
 		      var delta = (now - this._lastTime) / this._time;
@@ -2162,9 +2165,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 		exports.default = MotionTween;
 
-	/***/ },
+	/***/ }),
 	/* 2 */
-	/***/ function(module, exports) {
+	/***/ (function(module, exports) {
 
 		'use strict';
 
@@ -2223,6 +2226,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 		(function () {
+		    if (typeof window === 'undefined') return;
 		    var lastTime = 0;
 		    var vendors = ['ms', 'moz', 'webkit', 'o'];
 		    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -2249,9 +2253,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		    }
 		})();
 
-	/***/ },
+	/***/ }),
 	/* 3 */
-	/***/ function(module, exports) {
+	/***/ (function(module, exports) {
 
 		"use strict";
 
@@ -2451,9 +2455,9 @@ return /******/ (function(modules) { // webpackBootstrap
 			return easeOutBounce(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
 		}
 
-	/***/ },
+	/***/ }),
 	/* 4 */
-	/***/ function(module, exports) {
+	/***/ (function(module, exports) {
 
 		"use strict";
 
@@ -2541,9 +2545,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		CubicBezier.Type = "cubicBezier";
 		exports.default = CubicBezier;
 
-	/***/ },
+	/***/ }),
 	/* 5 */
-	/***/ function(module, exports, __webpack_require__) {
+	/***/ (function(module, exports, __webpack_require__) {
 
 		"use strict";
 
@@ -2611,9 +2615,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		Ease.Type = "ease";
 		exports.default = Ease;
 
-	/***/ },
+	/***/ }),
 	/* 6 */
-	/***/ function(module, exports) {
+	/***/ (function(module, exports) {
 
 		"use strict";
 
@@ -2677,9 +2681,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		Friction.Type = "friction";
 		exports.default = Friction;
 
-	/***/ },
+	/***/ }),
 	/* 7 */
-	/***/ function(module, exports) {
+	/***/ (function(module, exports) {
 
 		"use strict";
 
@@ -2748,9 +2752,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		Spring.Type = "spring";
 		exports.default = Spring;
 
-	/***/ },
+	/***/ }),
 	/* 8 */
-	/***/ function(module, exports) {
+	/***/ (function(module, exports) {
 
 		"use strict";
 
@@ -2872,12 +2876,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		SpringRK4.Type = "springRK4";
 		exports.default = SpringRK4;
 
-	/***/ }
+	/***/ })
 	/******/ ])
 	});
 	;
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;

@@ -1,6 +1,6 @@
 {
   "name": "range-master",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Provides animated control over range-dog",
   "main": "dist/range-master.js",
   "scripts": {
